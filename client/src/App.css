@@ -1,0 +1,175 @@
+/* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+/* Body styling */
+body {
+  font-family: sans-serif; /* Default system font stack */
+  height: 100vh;
+  background-color: #f8fafc; /* Light background */
+}
+
+/* Navbar Styling (Fixed at the top) */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 40px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10; /* Ensure it's on top of other content */
+  width: 100%;
+}
+
+/* Logo container in navbar */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-circle {
+  width: 50px;
+  height: 50px;
+  background-color: #1980e6;
+  border-radius: 50%;
+}
+
+.header-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #0e141b;
+}
+
+/* Button container in navbar */
+.button-container {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-primary,
+.btn-secondary {
+  min-width: 84px;
+  height: 40px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-weight: bold;
+  font-size: 0.875rem;
+  letter-spacing: 0.015em;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #1980e6;
+  color: #f8fafc;
+}
+
+.btn-secondary {
+  background-color: #e7edf3;
+  color: #0e141b;
+}
+
+/* Main content (with background image) */
+.main-content {
+  display: flex;
+  justify-content: center; /* Centers content vertically */
+  align-items: center; /* Centers content horizontally */
+  height: 100vh; /* Full viewport height minus the fixed navbar height */
+  padding-top: 80px; /* Adjust for the fixed navbar height */
+  box-sizing: border-box;
+  width: 100%;
+  flex-direction: column;
+}
+
+
+.background-image {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%; /* Increased height from 480px to 600px */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../Photos/girlsgeneration.jpg);
+  background-size: cover; /* Keeps the background covering the area */
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%; /* Ensures the box takes up full available width */
+  max-width: 100%; /* Increased the max-width to 1200px for a larger box */
+  padding: 32px; /* Padding inside the box */
+  text-align: center;
+}
+
+.main-heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  letter-spacing: -0.033em;
+  margin-bottom: 24px;
+}
+
+.button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.quiz-page {
+  /* margin-top: 200px;  This will push the content below the navbar */
+  padding: 20px;
+  /* border: 2px solid red; */
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.genre-list {
+  margin-top: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 80px ;
+}
+/* Responsive Design */
+@media (min-width: 480px) {
+  .background-image {
+    padding: 48px;
+  }
+
+  .main-heading {
+    font-size: 3rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    height: 48px;
+    padding: 0 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .background-image {
+    padding: 64px;
+  }
+
+  .main-heading {
+    font-size: 3.5rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    height: 56px;
+    padding: 0 24px;
+  }
+}
