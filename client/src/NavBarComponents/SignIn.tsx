@@ -13,8 +13,17 @@ const SignInPage: React.FC<SignInPageProps> = ({ changePage }) => {
   const [password, setPassword] = useState("");
 
   const handleSignIn = async () => {
+    const trimmedEmail = email.trim();  // Remove extra spaces from email
+    const trimmedPassword = password.trim();  // Remove extra spaces from password
+
+    if (!trimmedEmail || !trimmedPassword) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
     try {
-      await signIn(email, password);  // Call the signIn function from useAuth hook
+      // Try signing in with email and password
+      await signIn(trimmedEmail, trimmedPassword);  // Call the signIn function from useAuth hook
       changePage('quiz');  // Navigate to the quiz page after sign-in
     } catch (err) {
       console.error(err);
@@ -28,7 +37,7 @@ const SignInPage: React.FC<SignInPageProps> = ({ changePage }) => {
         <div className="sign-in-content">
           <h1 className="heading">Sign in</h1>
 
-          {/* Email Input */}
+          {/* Email or Username Input */}
           <div className="input-container">
             <label className="input-label">
               Email or Username

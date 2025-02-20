@@ -9,7 +9,7 @@ import SearchResultsPage from "./components/SearchResultsPage";
 import SignInPage from "./NavBarComponents/SignIn";
 import SignUpPage from "./NavBarComponents/SingUp";
 
-import { supabase } from './supabaseClient';  // Import the Supabase client
+import { supabase } from '../supabaseClient';  // Import the Supabase client
 
 interface Artist {
   id: number;
