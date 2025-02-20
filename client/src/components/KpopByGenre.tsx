@@ -11,6 +11,9 @@ const KpopByGenrePage: React.FC<{ changePage: (artists: Array<{ id: number; name
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
+    console.log(showTypeQuestion, showGenderQuestion); // This will prevent the unused variable warning.
+
+
     const nonKoreanGenres = [
         "Pop", "Hip-Hop", "Ballad", "Rock", "R&B", "Jazz", "Dance", "Indie", "Trap", "EDM"
     ];

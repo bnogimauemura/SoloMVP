@@ -55,8 +55,11 @@ const QuizPage: React.FC = () => {
         setUserAnswer(e.target.value);
     };
 
+    console.log(handleAnswerChange, userAnswer)
+    
     const handleSubmitAnswer = (selectedAnswer: string) => {
         const currentQuestion = shuffledQuestions[currentQuestionIndex];
+        console.log(currentQuestion);
 
         setUserAnswers((prevAnswers) => [...prevAnswers, selectedAnswer]);
 
