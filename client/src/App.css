@@ -135,11 +135,18 @@ body {
 }
 
 .genre-list {
-  margin-top: 200px;
+  margin-top: 140px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 80px ;
+}
+
+.selection-section {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding-top: 30px;
 }
 /* Responsive Design */
 @media (min-width: 480px) {

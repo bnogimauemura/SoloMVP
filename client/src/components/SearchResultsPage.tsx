@@ -9,7 +9,7 @@ interface SearchResultsPageProps {
     gender: string;
     created_at: string;
   }>;
-  music_videos: Array<{ artist_name: string; video_url: string }>;  // Update type to be an array
+  music_videos: Array<{ artist_name: string; video_url: string }>;
 }
 
 const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ artists, music_videos }) => {
@@ -23,45 +23,52 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ artists, music_vi
     return videoId ? `https://www.youtube.com/embed/${videoId}` : "";
   };
 
+  // Get the name of the first artist in the list (if any)
+  const firstArtistName = artists.length > 0 ? artists[0].name : "";
+
   return (
     <div className="search-results-page">
-      <h2 style={{ marginTop: "80px", textAlign: "center", fontSize: "40px" }}>
-        Artist Videos
-      </h2>
+      {artists.length > 0 ? (
+        <h2 style={{ marginTop: "100px", textAlign: "center", fontSize: "40px" }}>
+          {firstArtistName ? `${firstArtistName}'s Videos` : "Artist Videos"}
+        </h2>
+      ) : (
+        <p>No artists selected. Please select a genre, type, and gender first.</p>
+      )}
 
       <div className="artist-videos-list">
-        {artists.length > 0 ? (
-          artists.map((artist) => {
-            console.log("Artist Name:", artist.name); // Log to see the name
+        {artists.map((artist) => {
+          // Filter the music_videos to get all videos for the current artist
+          const artistVideos = music_videos.filter((video) => video.artist_name === artist.name);
 
-            // Use .find() to get the correct video URL for each artist
-            const videoUrl = music_videos.find((video) => video.artist_name === artist.name)?.video_url;
+          return (
+            <div key={artist.id} className="artist-video-item">
 
-            return (
-              <div key={artist.id} className="artist-video-item">
-                <h3>{artist.name}</h3>
-
-                {videoUrl ? (
-                  <iframe
-                    width="480"
-                    height="315"
-                    src={converterUrlToEmbedUrl(videoUrl)}
-                    title={`${artist.name} YouTube Video`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                ) : (
-                  <p>No video available for this artist.</p>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <p>No artists selected. Please select a genre, type, and gender first.</p>
-        )}
+              {artistVideos.length > 0 ? (
+                <div style={{ display: "flex", flexDirection: "row", overflowX: "auto", alignItems:'center', justifyContent:'center'}}>
+                  {artistVideos.map((video, index) => (
+                    <div key={index} style={{ marginRight: "20px" }}>
+                      <iframe
+                        width="700"
+                        height="400"
+                        src={converterUrlToEmbedUrl(video.video_url)}
+                        title={`${artist.name} Video ${index + 1}`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>No videos available for this artist.</p>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 };
 
 export default SearchResultsPage;
+

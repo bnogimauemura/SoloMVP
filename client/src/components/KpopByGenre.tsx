@@ -70,7 +70,7 @@ const KpopByGenrePage: React.FC<{ changePage: (artists: Array<{ id: number; name
 
     return (
         <div className="kpop-genre-page">
-            <h2 style={{ marginTop: '260px', textAlign: 'center', fontSize: '56px' }}>
+            <h2 style={{ marginTop: '240px', textAlign: 'center', fontSize: '56px' }}>
                 Discover Your Perfect Sound in the Korean Music World
             </h2>
             <p style={{ textAlign: 'center', fontSize: '30px' }}>Choose Your Favorite Music Genre</p>
@@ -103,8 +103,8 @@ const KpopByGenrePage: React.FC<{ changePage: (artists: Array<{ id: number; name
                 </>
             )}
 
-            <div className="search-button-container">
-                <button onClick={handleSearch} className="search-button" disabled={loading}>
+            <div className="search-button-container" style={{display: 'flex', flexDirection: 'row-reverse'}}>
+                <button onClick={handleSearch} className="search-button" disabled={loading} style={{display: 'flex', justifyContent:'flex-end'}}>
                     {loading ? 'Loading...' : 'Search'}
                 </button>
             </div>
