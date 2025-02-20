@@ -16,15 +16,28 @@ const QuizPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const shuffleArray = (array: Question[]): Question[] => {
+        let shuffledArray = [...array]; // Create a copy of the array
+        for (let i = shuffledArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; // Swap elements
+        }
+        return shuffledArray;
+    };
+
     // Fetch quiz questions from the backend
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
                 const response = await fetch("http://localhost:8080/api/quiz");
                 if (!response.ok) throw new Error("Failed to fetch quiz questions");
-
+       
                 const data = await response.json();
+                const shuffled = shuffleArray(data)
                 const limitedQuestions = data.slice(0, 5);
+                console.log("Before Shuffle:", limitedQuestions); // Log before shuffle
+                // const shuffled = shuffleArray(limitedQuestions);
+                console.log("After Shuffle:", shuffled); // Log after shuffle
                 setShuffledQuestions(limitedQuestions);
             } catch (err) {
                 setError("There was an error fetching the quiz questions.");
@@ -33,6 +46,7 @@ const QuizPage: React.FC = () => {
                 setLoading(false);
             }
         };
+       
 
         fetchQuestions();
     }, []);
