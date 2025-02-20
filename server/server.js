@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from the "client/dist" folder (build folder)
-app.use(express.static(path.join(__dirname, 'client', 'dist')));
+app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
 
 // Fetch quiz questions from Supabase (make sure the function is async)
 app.get('/api/quiz', async (req, res) => {
