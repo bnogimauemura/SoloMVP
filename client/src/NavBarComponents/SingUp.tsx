@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";  // Use default import here
 
 interface SignUpPageProps {
   changePage: (page: string) => void;
-  onSignUpClick: () => void;
+  onSignUpClick: (email:  string, password: string) => void;
 }
 
 interface SignUpFormData {

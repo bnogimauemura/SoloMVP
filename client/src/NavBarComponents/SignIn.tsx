@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";  // Import the useAuth hook
 
 interface SignInPageProps {
   changePage: (page: string) => void;
-  onSignInClick: () => void;
+  onSignInClick: (email:  string, password: string) => void;
 }
 
 const SignInPage: React.FC<SignInPageProps> = ({ changePage }) => {

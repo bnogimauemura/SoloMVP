@@ -9,7 +9,7 @@ import SearchResultsPage from "./components/SearchResultsPage";
 import SignInPage from "./NavBarComponents/SignIn";
 import SignUpPage from "./NavBarComponents/SingUp";
 
-import { supabase } from '../supabaseClient';  // Import the Supabase client
+import { supabase } from '../supabaseClient';
 
 interface Artist {
   id: number;
@@ -28,68 +28,137 @@ interface MusicVideo {
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<string>('home');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [artists, setArtists] = useState<Artist[]>([]); // Artists state
-  const [musicVideos, setMusicVideos] = useState<MusicVideo[]>([]); // Music videos state
+  const [user, setUser] = useState<any>(null); // To store logged-in user information
+  const [artists, setArtists] = useState<Artist[]>([]);
+  const [musicVideos, setMusicVideos] = useState<MusicVideo[]>([]);
 
-  // Function to fetch music videos from Supabase
-// Fetch music videos from Supabase
-const fetchMusicVideos = async () => {
-  try {
-    const { data, error } = await supabase.from('music_videos').select('*');
-    if (error) throw error;
+  // Fetch music videos from Supabase
+  const fetchMusicVideos = async () => {
+    try {
+      const { data, error } = await supabase.from('music_videos').select('*');
+      if (error) throw error;
 
-    // console.log('Fetched data from Supabase:', data);  // Check structure
+      const videos: MusicVideo[] = data.map((item: { artist_name: string, video_url: string }) => ({
+        artist_name: item.artist_name,
+        video_url: item.video_url
+      }));
 
-    // Now we map over the data and ensure artist_name exists and correctly handle it
-    const videos: MusicVideo[] = data.map((item: { artist_name: string, video_url: string }) => ({
-      artist_name: item.artist_name,  // We directly use 'artist_name' field
-      video_url: item.video_url
-    }));
-
-    setMusicVideos(videos);  // Set the fetched music videos to state
-  } catch (error) {
-    console.error("Error fetching music videos:", error);
-  }
-};
-
+      setMusicVideos(videos);  // Set music videos state
+    } catch (error) {
+      console.error("Error fetching music videos:", error);
+    }
+  };
 
   useEffect(() => {
-    fetchMusicVideos();  // Fetch music videos on component mount
+    fetchMusicVideos();  // Fetch music videos on mount
+  }, []);
+
+  // Check if user is logged in when the component mounts
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error getting session:", error);
+        return;
+      }
+      if (session) {
+        setIsLoggedIn(true);
+        setUser(session.user);  // Store user info
+      }
+
+      const authListener = supabase.auth.onAuthStateChange((_, session) => {
+        if(session) {
+          setIsLoggedIn(true);
+          setUser(session.user);
+        } else {
+          setIsLoggedIn(false);
+          setUser(null)
+        }
+      }) 
+      console.log(authListener)
+    };
+
+   
+    checkSession(); // Check session on mount
   }, []);
 
   const changePage = (page: string) => {
-    console.log(`Changing page to: ${page}`);
-    setCurrentPage(page);
+    setCurrentPage(page); // Change page based on action
   };
 
   const handleLogoClick = () => {
-    setCurrentPage('home');
+    setCurrentPage('home');  // Redirect to home page
   };
 
   const handleSignInClick = () => {
-    console.log("Sign In clicked");
-    setCurrentPage('signIn');
+    setCurrentPage('signIn');  // Navigate to SignIn page
   };
 
   const handleSignUpClick = () => {
-    console.log("Sign Up clicked");
-    setCurrentPage('signUp');
+    setCurrentPage('signUp');  // Navigate to SignUp page
   };
 
-  const handleSignIn = () => {
-    console.log("User logged in");
-    setIsLoggedIn(true);
-    setCurrentPage('quiz'); // Redirect to quiz page after sign in
+  const handleSignIn = async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      const user = data?.user;
+
+      if (user) {
+        setIsLoggedIn(true);
+        setUser(user);  // Store user info
+        setCurrentPage('quiz');  // Redirect to quiz page
+      } else {
+        alert("User not found");
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
   };
 
-  const handleSignUp = () => {
-    console.log("User signed up");
-    setCurrentPage('quiz'); // Redirect to quiz page after sign up
+  const handleSignUp = async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      const user = data?.user;
+
+      if (user) {
+        setIsLoggedIn(true);
+        setUser(user);  // Store user info
+        setCurrentPage('quiz');  // Redirect to quiz page
+      } else {
+        alert("Sign-up failed");
+      }
+    } catch (error) {
+      console.error("Error signing up:", error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();  // Log out the user
+      setIsLoggedIn(false);  // Set isLoggedIn to false
+      setUser(null);  // Clear user data
+      setCurrentPage('home');  // Redirect to home page
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   const handleProfileClick = () => {
     if (isLoggedIn) {
-      alert("Profile page clicked");
+      alert(`Welcome to your profile, ${user?.email}`);
+      setCurrentPage('profile');  // Navigate to profile page
     } else {
       alert("You need to log in first.");
     }
@@ -97,7 +166,7 @@ const fetchMusicVideos = async () => {
 
   const handleSearch = (artists: Artist[]) => {
     setArtists(artists);  // Update artists state
-    setCurrentPage('searchResults');  // Change to searchResults page
+    setCurrentPage('searchResults');  // Navigate to searchResults page
   };
 
   return (
@@ -107,6 +176,8 @@ const fetchMusicVideos = async () => {
         onSignInClick={handleSignInClick}
         onSignUpClick={handleSignUpClick}
         onProfileClick={handleProfileClick}
+        onSignOutClick={handleSignOut}
+        isLoggedIn={isLoggedIn}  // Pass isLoggedIn state to Navbar
       />
 
       {/* Conditional Rendering based on currentPage */}
