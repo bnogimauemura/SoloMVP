@@ -139,7 +139,7 @@ app.get('/api/profile', async (req, res) => {
 
 // Always serve the index.html file for all routes except API routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
