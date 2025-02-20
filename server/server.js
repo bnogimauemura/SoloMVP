@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from the "client/dist" folder (build folder)
-app.use(express.static(path.join(__dirname, '..', 'client', 'dist')));
+app.use(express.static(path.join(__dirname, '..' , '..', 'client', 'dist')));
 
 // Fetch quiz questions from Supabase (make sure the function is async)
 app.get('/api/quiz', async (req, res) => {
@@ -139,7 +139,7 @@ app.get('/api/profile', async (req, res) => {
 
 // Always serve the index.html file for all routes except API routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, '..' ,'..', 'client', 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
