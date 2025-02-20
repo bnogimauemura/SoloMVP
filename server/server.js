@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');  // Import path module
 const { createClient } = require('@supabase/supabase-js');
 const port = process.env.PORT || 3000; 
 
@@ -14,6 +15,9 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static files from the "client/dist" folder (build folder)
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
 // Fetch quiz questions from Supabase (make sure the function is async)
 app.get('/api/quiz', async (req, res) => {
@@ -133,6 +137,10 @@ app.get('/api/profile', async (req, res) => {
   }
 });
 
+// Always serve the index.html file for all routes except API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
